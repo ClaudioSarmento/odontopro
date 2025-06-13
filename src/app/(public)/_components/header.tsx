@@ -70,9 +70,9 @@ export function Header() {
             </Button>
           </SheetTrigger>
           <SheetContent side="right" className="w-[240px] sm:w-[300px] z-[9999]">
-            <SheetTitle>Menu</SheetTitle>
+            <SheetTitle className="p-2">Menu</SheetTitle>
             <SheetHeader></SheetHeader>
-            <SheetDescription>
+            <SheetDescription className="p-2">
               Veja nossos links
             </SheetDescription>
             <nav className='flex flex-col space-y-4 mt-6'>
