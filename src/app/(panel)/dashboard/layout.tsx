@@ -1,11 +1,11 @@
 import { SidebarDashboard } from "./_components/sidebar"
 
-export default function DashboardLayout({
+export default async function DashboardLayout({
     children,
 }: {
     children: React.ReactNode
-}){
-    return(
+}) {
+    return (
         <>
             <SidebarDashboard>
                 {children}
