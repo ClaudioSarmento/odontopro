@@ -12,10 +12,10 @@ import {
 } from "@/components/ui/sheet"
 import { Button } from "../../../components/ui/button";
 import { LogIn, Menu } from "lucide-react";
-import {useSession} from 'next-auth/react'
-import {handleRegister} from'../_actions/login'
+import { useSession } from 'next-auth/react'
+import { handleRegister } from '../_actions/login'
 export function Header() {
-  const {data: session, status} = useSession();
+  const { data: session, status } = useSession();
   const [isOpen, setIsOpen] = useState(false);
   const navItems = [
     { href: "#profissionais", label: "Profissionais" },
@@ -42,7 +42,7 @@ export function Header() {
 
       {status === 'loading' ? (
         <></>
-      ): session ? (
+      ) : session ? (
         <Link
           href="/dashboard"
           className='flex items-center justify-center gap-2 b-zinc-900 text-white py-1 rounded-md px-4'
@@ -87,7 +87,7 @@ export function Header() {
             </Button>
           </SheetTrigger>
 
-          <SheetContent side="right" className="w-[240px] sm:w-[300px] z-[9999]">
+          <SheetContent side="right" className="w-[240px] sm:w-[300px] z-[9999] p-5">
             <SheetTitle>Menu</SheetTitle>
             <SheetHeader></SheetHeader>
 
