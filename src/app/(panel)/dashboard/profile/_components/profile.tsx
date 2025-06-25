@@ -1,5 +1,5 @@
 "use client"
-import { useProfileForm } from './profile-form'
+import { ProfileFormData, useProfileForm } from './profile-form'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import {
     Form,
@@ -55,14 +55,32 @@ export function ProfileContent() {
 
     const hours = generateTimeSlots();
 
-    function toggleHour(hour: string){
-        setSelectedHours((prevState) => prevState.includes(hour) ? prevState.filter(h => h !== hour) : [...prevState,hour].sort())
+    function toggleHour(hour: string) {
+        setSelectedHours((prevState) => prevState.includes(hour) ? prevState.filter(h => h !== hour) : [...prevState, hour].sort())
+    }
+
+    const timeZones = Intl.supportedValuesOf("timeZone").filter((zone) =>
+        zone.startsWith("America/Sao_Paulo") ||
+        zone.startsWith("America/Fortaleza") ||
+        zone.startsWith("America/Recife") ||
+        zone.startsWith("America/Bahia") ||
+        zone.startsWith("America/Belem") ||
+        zone.startsWith("America/Manaus") ||
+        zone.startsWith("America/Cuiaba") ||
+        zone.startsWith("America/Boa-Vista")
+    );
+
+    async function onSubmit(values: ProfileFormData){
+        const profileData = {
+            ...values,
+            times: selectedHours
+        }
     }
 
     return (
         <div className='mx-auto'>
             <Form {...form}>
-                <form>
+                <form onSubmit={form.handleSubmit(onSubmit)}>
                     <Card>
                         <CardHeader>
                             <CardTitle>Meu Perfil</CardTitle>
@@ -129,7 +147,7 @@ export function ProfileContent() {
                                             <FormLabel className='font-semibold'>Status da clinica:</FormLabel>
                                             <FormControl>
                                                 <Select onValueChange={field.onChange}
-                                                    defaultValue='active'>
+                                                    defaultValue={field.value ? "active" : "inactive"}>
                                                     <SelectTrigger>
                                                         <SelectValue placeholder="Selecione o status da clinica" />
                                                     </SelectTrigger>
@@ -171,8 +189,8 @@ export function ProfileContent() {
                                                     {hours.map((hour) => (
                                                         <Button key={hour}
                                                             variant="outline"
-                                                            className={cn('border-2', 
-                                                                selectedHours.includes(hour) && 
+                                                            className={cn('border-2',
+                                                                selectedHours.includes(hour) &&
                                                                 'border-emerald-500 text-primary')}
                                                             onClick={() => toggleHour(hour)}
                                                         >
@@ -182,13 +200,43 @@ export function ProfileContent() {
                                                 </div>
                                             </section>
                                             <Button className='w-full'
-                                            onClick={() => setDialogIsOpen(false)}
+                                                onClick={() => setDialogIsOpen(false)}
                                             >
                                                 Fechar modal
                                             </Button>
                                         </DialogContent>
                                     </Dialog>
                                 </div>
+
+                                <FormField
+                                    control={form.control}
+                                    name="timeZone"
+                                    render={({ field }) => (
+                                        <FormItem>
+                                            <FormLabel className='font-semibold'>Selecione o fuso horário:</FormLabel>
+                                            <FormControl>
+                                                <Select onValueChange={field.onChange}
+                                                    defaultValue={field.value}>
+                                                    <SelectTrigger>
+                                                        <SelectValue placeholder="Selecione o seu fuso horário" />
+                                                    </SelectTrigger>
+                                                    <SelectContent>
+                                                        {timeZones.map((timeZone) => (
+                                                            <SelectItem key={timeZone} value={timeZone}>{timeZone}</SelectItem>
+                                                        ))}
+                                                    </SelectContent>
+                                                </Select>
+                                            </FormControl>
+                                        </FormItem>
+                                    )}
+                                />
+
+                                <Button
+                                    type='submit'
+                                    className='w-full bg-emerald-500 hover:bg-emerald-400'
+                                >
+                                    Salvar alterações
+                                </Button>
                             </div>
                         </CardContent>
                     </Card>

@@ -12,7 +12,7 @@ const profileSchema = z.object(
     }
 )
 
-type ProfileFormData = z.infer<typeof profileSchema>;
+export type ProfileFormData = z.infer<typeof profileSchema>;
 
 export function useProfileForm(){
     return useForm<ProfileFormData>({
