@@ -31,10 +31,32 @@ import {
 } from "@/components/ui/dialog"
 import { Button } from '@/components/ui/button'
 import { ArrowRight } from 'lucide-react'
+import { useState } from 'react'
+import { cn } from '@/lib/utils'
 
 export function ProfileContent() {
 
+    const [selectedHours, setSelectedHours] = useState<string[]>([]);
+
     const form = useProfileForm();
+
+    function generateTimeSlots(): string[] {
+        const hours: string[] = [];
+        for (let i = 8; i <= 24; i++) {
+            for (let j = 0; j < 2; j++) {
+                const hour = i.toString().padStart(2, "0");
+                const minute = (j * 30).toString().padStart(2, "0");
+                hours.push(`${hour}:${minute}`);
+            }
+        }
+        return hours;
+    }
+
+    const hours = generateTimeSlots();
+
+    function toggleHour(hour: string){
+        setSelectedHours((prevState) => prevState.includes(hour) ? prevState.filter(h => h !== hour) : [...prevState,hour].sort())
+    }
 
     return (
         <div className='mx-auto'>
@@ -128,7 +150,7 @@ export function ProfileContent() {
                                         <DialogTrigger asChild>
                                             <Button variant="outline" className='w-full justify-between'>
                                                 Clique aqui para selecionar horários
-                                                <ArrowRight className='w-5 h-5'/>
+                                                <ArrowRight className='w-5 h-5' />
                                             </Button>
                                         </DialogTrigger>
                                         <DialogContent>
@@ -140,12 +162,22 @@ export function ProfileContent() {
                                             </DialogHeader>
 
                                             <section className='py-4'>
-                                                <p className='text-sm text-muted-foreground'>
+                                                <p className='text-sm text-muted-foreground mb-2'>
                                                     Clique nos horários abaixo para marcar ou desmarcar:
                                                 </p>
 
-                                                <div>
-                                                    ...
+                                                <div className='grid grid-cols-5 gap-2'>
+                                                    {hours.map((hour) => (
+                                                        <Button key={hour}
+                                                            variant="outline"
+                                                            className={cn('border-2', 
+                                                                selectedHours.includes(hour) && 
+                                                                'border-emerald-500 text-primary')}
+                                                            onClick={() => toggleHour(hour)}
+                                                        >
+                                                            {hour}
+                                                        </Button>
+                                                    ))}
                                                 </div>
                                             </section>
                                         </DialogContent>
