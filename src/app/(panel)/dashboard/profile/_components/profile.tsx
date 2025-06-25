@@ -37,6 +37,7 @@ import { cn } from '@/lib/utils'
 export function ProfileContent() {
 
     const [selectedHours, setSelectedHours] = useState<string[]>([]);
+    const [dialogIsOpen, setDialogIsOpen] = useState<boolean>(false);
 
     const form = useProfileForm();
 
@@ -146,7 +147,7 @@ export function ProfileContent() {
                                     <Label className='font-semibold'>
                                         Configurar horários da clinica
                                     </Label>
-                                    <Dialog>
+                                    <Dialog open={dialogIsOpen} onOpenChange={setDialogIsOpen}>
                                         <DialogTrigger asChild>
                                             <Button variant="outline" className='w-full justify-between'>
                                                 Clique aqui para selecionar horários
@@ -180,6 +181,11 @@ export function ProfileContent() {
                                                     ))}
                                                 </div>
                                             </section>
+                                            <Button className='w-full'
+                                            onClick={() => setDialogIsOpen(false)}
+                                            >
+                                                Fechar modal
+                                            </Button>
                                         </DialogContent>
                                     </Dialog>
                                 </div>
