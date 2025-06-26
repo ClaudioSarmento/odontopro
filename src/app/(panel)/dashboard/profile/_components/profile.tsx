@@ -55,6 +55,7 @@ export function ProfileContent({user}: ProfileContentProps) {
         timeZone: user.timeZone
     });
 
+
     function generateTimeSlots(): string[] {
         const hours: string[] = [];
         for (let i = 8; i <= 24; i++) {
@@ -103,7 +104,7 @@ export function ProfileContent({user}: ProfileContentProps) {
                             <div className='flex justify-center'>
                                 <div className='bg-gray-200 relative h-40 w-40 rounded-full overflow-hidden'>
                                     <Image
-                                        src={imgTest}
+                                        src={user.image ? user.image : imgTest}
                                         alt="Foto da clinica"
                                         fill
                                         className='object-cover'
