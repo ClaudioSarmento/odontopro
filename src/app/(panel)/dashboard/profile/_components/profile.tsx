@@ -33,13 +33,27 @@ import { Button } from '@/components/ui/button'
 import { ArrowRight } from 'lucide-react'
 import { useState } from 'react'
 import { cn } from '@/lib/utils'
+import { Subscription, User }  from '../../../../../../generated/prisma';
 
-export function ProfileContent() {
 
-    const [selectedHours, setSelectedHours] = useState<string[]>([]);
+interface ProfileContentProps {
+  user: User & {
+    subscription: Subscription;
+  };
+}
+
+export function ProfileContent({user}: ProfileContentProps) {
+
+    const [selectedHours, setSelectedHours] = useState<string[]>(user.times ?? []);
     const [dialogIsOpen, setDialogIsOpen] = useState<boolean>(false);
 
-    const form = useProfileForm();
+    const form = useProfileForm({
+        name: user.name,
+        address: user.address,
+        phone: user.phone,
+        status: user.status,
+        timeZone: user.timeZone
+    });
 
     function generateTimeSlots(): string[] {
         const hours: string[] = [];
