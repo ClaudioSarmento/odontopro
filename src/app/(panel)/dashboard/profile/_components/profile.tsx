@@ -34,6 +34,9 @@ import { ArrowRight } from 'lucide-react'
 import { useState } from 'react'
 import { cn } from '@/lib/utils'
 import { Subscription, User }  from '../../../../../../generated/prisma';
+import { updateProfile } from '../_actions/update-profile'
+import {toast} from 'sonner'
+import { formatPhone } from '@/utils/formatPhone'
 
 
 interface ProfileContentProps {
@@ -52,7 +55,8 @@ export function ProfileContent({user}: ProfileContentProps) {
         address: user.address,
         phone: user.phone,
         status: user.status,
-        timeZone: user.timeZone
+        timeZone: user.timeZone,
+        
     });
 
 
@@ -86,10 +90,21 @@ export function ProfileContent({user}: ProfileContentProps) {
     );
 
     async function onSubmit(values: ProfileFormData){
-        const profileData = {
-            ...values,
-            times: selectedHours
+
+        const response = await updateProfile({
+            name: values.name,
+            address: values.address,
+            status: values.status === 'active' ? true : false,
+            phone: values.phone,
+            timeZone: values.timeZone,
+            times: selectedHours || []
+        });
+
+        if(response.error){
+            toast.error(response.error, {richColors: true})
+            return;
         }
+        toast.success(response.data, { richColors : true})
     }
 
     return (
@@ -147,7 +162,13 @@ export function ProfileContent({user}: ProfileContentProps) {
                                         <FormItem>
                                             <FormLabel className='font-semibold'>Telefone:</FormLabel>
                                             <FormControl>
-                                                <Input {...field} placeholder='Digite o telefone...' />
+                                                <Input 
+                                                    {...field} 
+                                                    placeholder='(67) 99912-4040' 
+                                                    onChange={(e) => {
+                                                        const formattedValue = formatPhone(e.target.value)
+                                                        field.onChange(formattedValue)
+                                                    }}/>
                                             </FormControl>
                                             <FormMessage />
                                         </FormItem>

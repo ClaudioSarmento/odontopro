@@ -8,6 +8,7 @@ interface UseProfileFormProps {
     phone: string | null;
     status: boolean | null;
     timeZone: string | null;
+    
 }
 
 const profileSchema = z.object(
@@ -30,7 +31,7 @@ export function useProfileForm({name, address, phone, status, timeZone}: UseProf
             address: address || "",
             phone: phone || "",
             status: status ? "active" : "inactive",
-            timeZone: timeZone || ""
+            timeZone: timeZone || "",
         }
     })
 }
