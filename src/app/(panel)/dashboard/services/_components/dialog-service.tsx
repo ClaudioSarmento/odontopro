@@ -2,7 +2,7 @@
 
 import { DialogHeader } from "@/components/ui/dialog"
 import { DialogDescription, DialogTitle } from "@radix-ui/react-dialog"
-import { useDialogServiceForm } from "./dialog-service-form"
+import { DialogServiceFormData, useDialogServiceForm } from "./dialog-service-form"
 import {
     Form,
     FormControl,
@@ -18,6 +18,22 @@ export function DialogService(){
 
     const form = useDialogServiceForm()
 
+    async function onSubmit(values: DialogServiceFormData) {
+        console.log(values)
+    }
+
+    function chanceCurrency(event: React.ChangeEvent<HTMLInputElement>){
+        let { value } = event.target;
+        value = value.replace(/\D/g,'');
+        if(value){
+            value = (parseInt(value,10) / 100).toFixed(2);
+            value = value.replace('.',',');
+            value = value.replace(/\B(?=(\d{3})+(?!\d))/g,'.')        
+        }
+
+        event.target.value = value;
+        form.setValue("price",value);
+    }
     return(
         <>
             <DialogHeader>
@@ -28,7 +44,8 @@ export function DialogService(){
             </DialogHeader>
 
             <Form {...form}>
-                <form className="space-y-2">
+                <form className="space-y-2"
+                onSubmit={form.handleSubmit(onSubmit)}>
                     <div className="flex flex-col">
                         <FormField 
                             control={form.control}
@@ -54,7 +71,10 @@ export function DialogService(){
                                         Valor do serviço:
                                     </FormLabel>
                                     <FormControl>
-                                        <Input {...field} placeholder="Ex: 120,00"/>
+                                        <Input 
+                                            {...field} placeholder="Ex: 120,00"
+                                            onChange={chanceCurrency}
+                                        />
                                     </FormControl>
                                     <FormMessage/>
                                 </FormItem>
