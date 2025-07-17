@@ -35,13 +35,17 @@ export function ServicesList() {
                 <Card>
                     <CardHeader className='flex flex-row items-center justify-between space-y-0 pb-2'>
                         <CardTitle className='text-xl md:text-2xl font-bold'>Serviços</CardTitle>
-                        <DialogTrigger>
+                        <DialogTrigger asChild>
                             <Button>
                                 <Plus className='w-4 h-4'/>
                             </Button>
                         </DialogTrigger>
                         <DialogContent>
-                           <DialogService/>
+                           <DialogService
+                            closeModal={() => {
+                                setIsDialogOpen(false);
+                            }}
+                           />
                         </DialogContent>
                     </CardHeader>
                 </Card>
