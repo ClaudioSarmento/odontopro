@@ -23,8 +23,13 @@ import {Plus} from 'lucide-react'
 
 import { Button } from '@/components/ui/button'
 import { DialogService } from './dialog-service'
+import { Service } from '../../../../../../generated/prisma'
 
-export function ServicesList() {
+interface ServicesListProps {
+    services: Service[]
+}
+
+export function ServicesList({services} : ServicesListProps) {
     const [isDialogOpen, setIsDialogOpen] = useState(false)
 
     return (
@@ -48,6 +53,15 @@ export function ServicesList() {
                            />
                         </DialogContent>
                     </CardHeader>
+                    <CardContent>
+                        <section className='space-y-4'>
+                            {services.map(service => (
+                                <article key={service.id}>
+                                    
+                                </article>
+                            ))}
+                        </section>
+                    </CardContent>
                 </Card>
             </section>
         </Dialog>
