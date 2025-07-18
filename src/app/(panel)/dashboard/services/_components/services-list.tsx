@@ -3,18 +3,12 @@ import { useState } from 'react'
 import {
     Dialog,
     DialogContent,
-    DialogDescription,
-    DialogHeader,
-    DialogTitle,
     DialogTrigger,
 } from "@/components/ui/dialog"
 
 import {
     Card,
-    CardAction,
     CardContent,
-    CardDescription,
-    CardFooter,
     CardHeader,
     CardTitle,
 } from "@/components/ui/card"
@@ -34,6 +28,7 @@ interface ServicesListProps {
 
 export function ServicesList({services} : ServicesListProps) {
     const [isDialogOpen, setIsDialogOpen] = useState(false)
+    const [editingService, setEditingService] = useState<null | Service>(null)
 
     async function handleDeleteService(serviceId: string){
         const response = await deleteService({serviceId});
@@ -45,6 +40,12 @@ export function ServicesList({services} : ServicesListProps) {
         toast.success(response.data);
 
     }
+
+    async function handleEditService(service: Service){
+        setEditingService(service);
+        setIsDialogOpen(true);
+    }
+
 
     return (
         <Dialog
@@ -64,6 +65,13 @@ export function ServicesList({services} : ServicesListProps) {
                             closeModal={() => {
                                 setIsDialogOpen(false);
                             }}
+                            serviceId={editingService ? editingService.id : undefined}
+                            initialValues={ editingService ? {
+                                name: editingService.name,
+                                price: (editingService.price / 100).toFixed(2).replace(".",","),
+                                hours: Math.floor(editingService.duration / 60).toString(),
+                                minutes: (editingService.duration % 60).toString()
+                            }: undefined}
                            />
                         </DialogContent>
                     </CardHeader>
@@ -83,7 +91,7 @@ export function ServicesList({services} : ServicesListProps) {
                                         <Button 
                                             variant="ghost"
                                             size="icon"
-                                            onClick={() => {}}
+                                            onClick={() => handleEditService(service)}
                                         >
                                             <Pencil className='w-4 h-4'/>
                                         </Button>

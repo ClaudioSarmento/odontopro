@@ -20,11 +20,18 @@ import { useState } from "react"
 
 interface DialogServiceProps {
     closeModal: () => void;
+    serviceId?: string;
+    initialValues?: {
+        name: string;
+        price: string;
+        hours: string;
+        minutes: string;
+    }
 }
 
-export function DialogService({closeModal}: DialogServiceProps){
+export function DialogService({closeModal, initialValues, serviceId}: DialogServiceProps){
 
-    const form = useDialogServiceForm()
+    const form = useDialogServiceForm({initialValues: initialValues})
     const [loading, setLoading] = useState(false);
 
     async function onSubmit(values: DialogServiceFormData) {
