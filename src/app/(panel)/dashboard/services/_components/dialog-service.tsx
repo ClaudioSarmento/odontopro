@@ -43,6 +43,18 @@ export function DialogService({closeModal, initialValues, serviceId}: DialogServ
         // Converter horas e minutos para duração total em minutos;
         const duration = (hours * 60) + minutes;
 
+        if(serviceId){
+            await editServiceById({
+                serviceId: serviceId,
+                name: values.name,
+                priceInCents: priceInCents,
+                duration: duration
+            })
+
+            
+            return;
+        }
+
         const response = await createNewService({
             name: values.name,
             price: priceInCents,
@@ -57,6 +69,18 @@ export function DialogService({closeModal, initialValues, serviceId}: DialogServ
         toast.success("Serviço cadastado com sucesso");
         handleCloseModal();
     }
+
+    async function editServiceById({serviceId, 
+        name, 
+        priceInCents, 
+        duration}: {
+            serviceId: string, 
+            name: string, 
+            priceInCents: number,
+             duration: number
+        }){
+            console.log("Você quer editar");
+        }
 
     function handleCloseModal(){
         form.reset();
@@ -157,7 +181,7 @@ export function DialogService({closeModal, initialValues, serviceId}: DialogServ
                     </div>
                     <Button type="submit" className="w-full font-semibold text-white"
                     disabled={loading}>
-                           {loading? "Cadastrando..." : "Adicionar serviço"}
+                           {loading? "Cadastrando..." : `${serviceId ? "Atualiar serviço" : "Cadastrar"}`}
                     </Button>
                 </form>
             </Form>
